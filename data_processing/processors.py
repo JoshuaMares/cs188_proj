@@ -63,7 +63,7 @@ class DummyDataset(Dataset):
 
     def __len__(self):
         return len(self.examples)
-        
+
     def __getitem__(self, idx):
 
         example = self.examples[idx]
@@ -127,7 +127,7 @@ class SemEvalDataset(Dataset):
 
     def __len__(self):
         return len(self.examples)
-        
+
     def __getitem__(self, idx):
 
         ##################################################
@@ -137,7 +137,6 @@ class SemEvalDataset(Dataset):
         # models (e.g. RoBERTa), please take special care
         # of it with an if-else statement.
         example = self.examples[idx]
-        
         guid = example.guid
         text = example.text
         label = example.label
@@ -156,8 +155,8 @@ class SemEvalDataset(Dataset):
             token_type_ids = torch.zeros_like(input_ids)
         else:
             token_type_ids = torch.Tensor(batch_encoding["token_type_ids"]).long()
-        
-        
+
+
         #raise NotImplementedError("Please finish the TODO!")
         # End of TODO.
         ##################################################
@@ -207,7 +206,7 @@ class Com2SenseDataset(Dataset):
 
     def __len__(self):
         return len(self.examples)
-        
+
     def __getitem__(self, idx):
 
         ##################################################
@@ -217,11 +216,11 @@ class Com2SenseDataset(Dataset):
         # models (e.g. RoBERTa), please take special care
         # of it with an if-else statement.
         example = self.examples[idx]
-        
+
         guid = example.guid
         text = example.text
         label = example.label
-        
+
         domain = example.domain
         scenario = example.scenario
         numeracy = example.numeracy
@@ -239,8 +238,8 @@ class Com2SenseDataset(Dataset):
         if "token_type_ids" not in batch_encoding:
             token_type_ids = torch.zeros_like(input_ids)
         else:
-            token_type_ids = torch.Tensor(batch_encoding["token_type_ids"]).long()        
-        
+            token_type_ids = torch.Tensor(batch_encoding["token_type_ids"]).long()
+
         #raise NotImplementedError("Please finish the TODO!")
         # End of TODO.
         ##################################################

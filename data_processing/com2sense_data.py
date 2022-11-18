@@ -63,32 +63,32 @@ class Com2SenseDataProcessor(DataProcessor):
         # labels field.
         json_path = os.path.join(data_dir, split+".json")
         data = json.load(open(json_path, "r"))
-        
+
         examples = []
 
         for i in range(len(data)):
             pair_dict = data[i]
-            
+
             example_1 = Coms2SenseSingleSentenceExample(
                 guid = i*2,
                 text = pair_dict['sent_1'],
                 label = self.label2int[pair_dict['label_1']] if 'label_1' in pair_dict.keys() else None,
-                domain = pair_dict['domain'] if 'domain' in pair_dict.keys() else None,
-                scenario = pair_dict['scenario'] if 'scenario' in pair_dict.keys() else None,
-                numeracy = pair_dict['numeracy'] if 'numeracy' in pair_dict.keys() else None
+                domain = pair_dict['domain'],
+                scenario = pair_dict['scenario'],
+                numeracy = pair_dict['numeracy']
             )
             example_2 = Coms2SenseSingleSentenceExample(
                 guid = (i*2) + 1,
                 text = pair_dict['sent_2'],
                 label = self.label2int[pair_dict['label_2']] if 'label_2' in pair_dict.keys() else None,
-                domain = pair_dict['domain'] if 'domain' in pair_dict.keys() else None,
-                scenario = pair_dict['scenario'] if 'scenario' in pair_dict.keys() else None,
-                numeracy = pair_dict['numeracy'] if 'numeracy' in pair_dict.keys() else None
+                domain = pair_dict['domain'],
+                scenario = pair_dict['scenario'],
+                numeracy = pair_dict['numeracy']
             )
-            
+
             examples.append(example_1)
             examples.append(example_2)
-            
+
         return examples
         #raise NotImplementedError("Please finish the TODO!")
         # End of TODO.
