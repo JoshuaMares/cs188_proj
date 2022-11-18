@@ -223,11 +223,21 @@ def train(args, train_dataset, model, tokenizer):
 
             ##################################################
             # TODO: Please finish the following training loop.
-            raise NotImplementedError("Please finish the TODO!")
 
+            """
+            zero out gradients - done outside of todo
+            prediction
+            compute loss based on prediction
+            gradients backward pass
+            update weights - done by optimizer outside of loop
+            """
+            outputs = model(**inputs)
+            #print("output loss", outputs.loss)
+            #raise NotImplementedError("Please finish the TODO!")
             # TODO: See the HuggingFace transformers doc to properly get
             # the loss from the model outputs.
-            raise NotImplementedError("Please finish the TODO!")
+            loss = outputs.loss
+            #raise NotImplementedError("Please finish the TODO!")
 
             if args.n_gpu > 1:
                 # Applies mean() to average on multi-gpu parallel training.
@@ -235,10 +245,13 @@ def train(args, train_dataset, model, tokenizer):
 
             # Handles the `gradient_accumulation_steps`, i.e., every such
             # steps we update the model, so the loss needs to be devided.
-            raise NotImplementedError("Please finish the TODO!")
+            loss = loss / (args.per_gpu_train_batch_size * max(1, args.n_gpu) \
+                            * args.gradient_accumulation_steps)
+            #raise NotImplementedError("Please finish the TODO!")
 
             # Loss backward.
-            raise NotImplementedError("Please finish the TODO!")
+            loss.backward()
+            #raise NotImplementedError("Please finish the TODO!")
 
             # End of TODO.
             ##################################################
@@ -303,7 +316,7 @@ def train(args, train_dataset, model, tokenizer):
                                 output_dir)
 
                     # Optional TODO: You can implement a save best functionality
-                    # to also save best thus far models to a specific output 
+                    # to also save best thus far models to a specific output
                     # directory such as `checkpoint-best`, the saved weights
                     # will be overwritten each time your model reaches a best
                     # thus far evaluation results on the dev set.
@@ -388,18 +401,20 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
 
             ##################################################
             # TODO: Please finish the following eval loop.
-            raise NotImplementedError("Please finish the TODO!")
+            #raise NotImplementedError("Please finish the TODO!")
 
             # TODO: See the HuggingFace transformers doc to properly get the loss
-            # AND the logits from the model outputs, it can simply be 
+            # AND the logits from the model outputs, it can simply be
             # indexing properly the outputs as tuples.
             # Make sure to perform a `.mean()` on the eval loss and add it
             # to the `eval_loss` variable.
-            raise NotImplementedError("Please finish the TODO!")
+            outputs = model(**inputs)
+            eval_loss += outputs.loss.mean()
 
             # TODO: Handles the logits with Softmax properly.
-            raise NotImplementedError("Please finish the TODO!")
-
+            logits = outputs.logits
+            preds = torch.nn.functional.softmax(logits, dim = 1)
+            labels = torch.argmax(preds)
             # End of TODO.
             ##################################################
 
@@ -450,10 +465,17 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
             # the following metrics: accuracy, precision, recall and F1-score.
             # Please also make your sci-kit learn scores able to take the
             # `args.score_average_method` for the `average` argument.
-            raise NotImplementedError("Please finish the TODO!")
+            eval_acc = accuracy_score(labels, preds)
+            eval_prec = precision_score(labels, preds, average = args.score_average_method)
+            eval_recall = recall_score(labels, preds, average = args.score_average_method)
+            eval_f1 = f1_score(labels, preds, average = args.score_average_method)
+
+
+            #raise NotImplementedError("Please finish the TODO!")
             # TODO: Pairwise accuracy.
             if args.task_name == "com2sense":
-                raise NotImplementedError("Please finish the TODO!")
+                eval_pairwise_acc = pairwise_accuracy(guids, preds, labels)
+                #raise NotImplementedError("Please finish the TODO!")
 
         # End of TODO.
         ##################################################
@@ -528,14 +550,14 @@ def load_and_cache_examples(args, task, tokenizer, evaluate=False,
     if args.local_rank == 0 and not evaluate:
         # Make sure only the first process in distributed training process the
         # dataset, and the others will use the cache
-        torch.distributed.barrier() 
-    
+        torch.distributed.barrier()
+
     return dataset
 
 
 def main():
     torch.autograd.set_detect_anomaly(True)
-    
+
     args = get_args()
 
     # Writes the prefix to the output dir path.
@@ -603,7 +625,7 @@ def main():
     if args.local_rank not in [-1, 0]:
         # Make sure only the first process in distributed training will
         # download model & vocab.
-        torch.distributed.barrier() 
+        torch.distributed.barrier()
 
     # Getting the labels
     processor = data_processors[args.task_name]()
@@ -621,12 +643,20 @@ def main():
     # for essential args.
 
     # TODO: Huggingface configs.
-    raise NotImplementedError("Please finish the TODO!")
+    if args.config_name:
+        config = AutoConfig.from_pretrained(args.config_name)
+    else:
+        config = AutoConfig.from_pretrained(args.model_name_or_path)
+    #raise NotImplementedError("Please finish the TODO!")
 
     # TODO: Tokenizer.
-    raise NotImplementedError("Please finish the TODO!")
+    if args.tokenizer_name:
+        tokenizer = AutoTokenizer.from_pretrained(args.tokenizer_name)
+    else:
+        tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
+    #raise NotImplementedError("Please finish the TODO!")
 
-    # TODO: Defines the model. We use the MLM model when 
+    # TODO: Defines the model. We use the MLM model when
     # `training_phase` is `pretrain` otherwise we use the
     # sequence classification model.
     if args.training_phase == "pretrain":
@@ -636,7 +666,8 @@ def main():
             config=config,
         )
     else:
-        raise NotImplementedError("Please finish the TODO!")
+        model = AutoModelForSequenceClassification.from_config(config)
+        #raise NotImplementedError("Please finish the TODO!")
 
     # End of TODO.
     ##################################################

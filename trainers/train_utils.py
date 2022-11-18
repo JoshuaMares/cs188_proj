@@ -19,21 +19,37 @@ from transformers import (
     AutoTokenizer,
 )
 
+def sort_crit(tup):
+    return tup[0]
 
 def pairwise_accuracy(guids, preds, labels):
 
     acc = 0.0  # The accuracy to return.
-    
+
     ########################################################
     # TODO: Please finish the pairwise accuracy computation.
     # Hint: Utilize the `guid` as the `guid` for each
     # statement coming from the same complementary
     # pair is identical. You can simply pair the these
-    # predictions and labels w.r.t the `guid`. 
-    raise NotImplementedError("Please finish the TODO!")
+    # predictions and labels w.r.t the `guid`.
+    list = []
+    for i in range(0, len(guids)):
+        list.append((guids[i], preds[i], labels[i]))
+
+    list.sort(key = sort_crit)
+    for i in range(0, len(list), 2):
+        if list[i][1] == list[i][2] and list[i+1][1] == list[i+1][2]:
+            acc += 1
+
+    acc = acc*2 / len(list)
+
+
+
+
+    #raise NotImplementedError("Please finish the TODO!")
     # End of TODO
     ########################################################
-     
+
     return acc
 
 
@@ -44,7 +60,7 @@ if __name__ == "__main__":
     preds = np.asarray([0, 0, 1, 0, 0, 1, 1, 1])
     labels = np.asarray([1, 0,1, 0, 0, 1, 1, 1])
     acc = pairwise_accuracy(guids, preds, labels)
-    
+
     if acc == 0.75:
         print("Your `pairwise_accuracy` function is correct!")
     else:

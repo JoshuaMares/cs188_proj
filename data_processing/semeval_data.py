@@ -50,8 +50,40 @@ class SemEvalDataProcessor(DataProcessor):
         #      examples.append(example_1)
         #      examples.append(example_2)
         # For the guid, simply use the row number (0-
-        # indexed) for each data instance.
-        raise NotImplementedError("Please finish the TODO!")
+        # indexed) for each data instance. 
+        csvfile = open(os.path.join(data_dir, split+".csv"), 'r')
+        reader = csv.reader(csvfile)
+        examples = []
+        
+        i = 0
+        for line in reader:
+            example_1 = SemEvalSingleSentenceExample(
+                guid = i*2,
+                text = line[0],
+                label = 1,
+                right_reason1 = line[2],
+                right_reason2 = line[5],
+                right_reason3 = line[6],
+                confusing_reason1 = line[3],
+                confusing_reason2 = line[4]
+            )
+            example_2 = SemEvalSingleSentenceExample(
+                guid = (i*2)+1,
+                text = line[1],
+                label = 0,
+                right_reason1 = line[2],
+                right_reason2 = line[5],
+                right_reason3 = line[6],
+                confusing_reason1 = line[3],
+                confusing_reason2 = line[4]
+            )
+            
+            examples.append(example_1)
+            examples.append(example_2)
+            i+=1
+        
+        return examples
+        #raise NotImplementedError("Please finish the TODO!")
         # End of TODO.
         ##################################################
 
