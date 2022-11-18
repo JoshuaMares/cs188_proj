@@ -413,8 +413,9 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
 
             # TODO: Handles the logits with Softmax properly.
             logits = outputs.logits
-            preds = torch.nn.functional.softmax(logits, dim = 1)
-            labels = torch.argmax(preds, dim = 1)
+            logits = torch.nn.functional.softmax(logits, dim = 1)
+            #preds = preds.detach().cpu().numpy()
+            #labels = torch.argmax(preds, dim = 1)
             # End of TODO.
             ##################################################
 
