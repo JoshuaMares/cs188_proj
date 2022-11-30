@@ -38,7 +38,7 @@ class DummyDataProcessor(DataProcessor):
 
         json_path = os.path.join(data_dir, split+".json")
         data = json.load(open(json_path, "r"))
-        
+
         examples = []
 
         for i in range(len(data)):
@@ -80,3 +80,6 @@ if __name__ == "__main__":
     for i in range(3):
         print(test_examples[i])
     print()
+    print(len(train_examples))
+    print(len(val_examples))
+    print(len(test_examples))
