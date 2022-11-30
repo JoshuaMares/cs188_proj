@@ -413,7 +413,8 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
 
             # TODO: Handles the logits with Softmax properly.
             logits = outputs.logits
-            logits = torch.nn.functional.softmax(logits, dim = 1)
+            logits = torch.nn.functional.softmax(logits, dim = -1)
+            #logits = torch.nn.functional.softmax(logits, dim = 1)
             #preds = preds.detach().cpu().numpy()
             #labels = torch.argmax(preds, dim = 1)
             # End of TODO.
@@ -470,8 +471,6 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
             eval_prec = precision_score(labels, preds, average = args.score_average_method)
             eval_recall = recall_score(labels, preds, average = args.score_average_method)
             eval_f1 = f1_score(labels, preds, average = args.score_average_method)
-
-
             #raise NotImplementedError("Please finish the TODO!")
             # TODO: Pairwise accuracy.
             if args.task_name == "com2sense":
@@ -655,6 +654,7 @@ def main():
         tokenizer = AutoTokenizer.from_pretrained(args.tokenizer_name)
     else:
         tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
+        #not correct tokenizer if from
     #raise NotImplementedError("Please finish the TODO!")
 
     # TODO: Defines the model. We use the MLM model when
@@ -663,11 +663,16 @@ def main():
     if args.training_phase == "pretrain":
         model = AutoModelForMaskedLM.from_pretrained(
             args.model_name_or_path,
-            from_tf=bool(".ckpt" in args.model_name_or_path),
-            config=config,
+            from_tf=bool("ckpt" in args.model_name_or_path),
+            config=config
         )
     else:
-        model = AutoModelForSequenceClassification.from_config(config)
+        #model = AutoModelForSequenceClassification.from_config(config)
+        model = AutoModelForSequenceClassification.from_pretrained(
+            args.model_name_or_path,
+            from_tf=bool("ckpt" in args.model_name_or_path),
+            config=config
+        )
         #raise NotImplementedError("Please finish the TODO!")
 
     # End of TODO.
