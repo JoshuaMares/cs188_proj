@@ -663,15 +663,15 @@ def main():
     if args.training_phase == "pretrain":
         model = AutoModelForMaskedLM.from_pretrained(
             args.model_name_or_path,
-            from_tf=bool("ckpt" in args.model_name_or_path),
-            config=config
+            from_tf=bool(".ckpt" in args.model_name_or_path),
+            config=config,
         )
     else:
         #model = AutoModelForSequenceClassification.from_config(config)
         model = AutoModelForSequenceClassification.from_pretrained(
             args.model_name_or_path,
-            from_tf=bool("ckpt" in args.model_name_or_path),
-            config=config
+            from_tf=bool(".ckpt" in args.model_name_or_path),
+            config=config,
         )
         #raise NotImplementedError("Please finish the TODO!")
 

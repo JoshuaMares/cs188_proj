@@ -9,11 +9,12 @@ OUTPUT_DIR=${TASK_NAME}/ckpts
 
 CUDA_VISIBLE_DEVICES=0 python3 -m trainers.train \
   --model_name_or_path ${TRAINED_MODEL} \
+  --config_name "${TRAINED_MODEL}/config.json" \
   --output_dir "${OUTPUT_DIR}/ckpts" \
   --task_name "${TASK_NAME}" \
   --data_dir "${DATA_DIR}" \
   --eval_split "test" \
-  --tokenizer_name ${MODEL_TYPE} \
+  --tokenizer_name "${TRAINED_MODEL}/tokeizer.json" \
   --max_seq_length 128 \
   --do_eval \
 
