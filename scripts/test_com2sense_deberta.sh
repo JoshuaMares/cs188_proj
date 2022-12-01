@@ -14,7 +14,7 @@ CUDA_VISIBLE_DEVICES=0 python3 -m trainers.train \
   --task_name "${TASK_NAME}" \
   --data_dir "${DATA_DIR}" \
   --eval_split "test" \
-  --tokenizer_name "${TRAINED_MODEL}/tokenizer.json" \
+  --tokenizer_name ${MODEL_TYPE} \
   --max_seq_length 128 \
   --do_eval \
 
