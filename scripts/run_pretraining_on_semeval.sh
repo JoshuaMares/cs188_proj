@@ -1,4 +1,4 @@
-TASK_NAME="semeval_2020_task4"
+TASK_NAME="semeval"
 DATA_DIR="datasets/semeval_2020_task4"
 MODEL_TYPE="microsoft/deberta-base"
 
