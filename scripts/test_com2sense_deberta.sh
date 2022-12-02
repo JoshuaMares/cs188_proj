@@ -4,7 +4,6 @@ MODEL_TYPE="microsoft/deberta-base"
 #MODEL_TYPE="bert-base-cased"
 #MODEL_TYPE="roberta-base"
 MODEL_TYPE="microsoft/deberta-base"
-TRAINED_MODEL="outputs/com2sense/ckpts/checkpoint-5000"
 
 OUTPUT_DIR=${TASK_NAME}/ckpts
 
