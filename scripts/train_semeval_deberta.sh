@@ -13,7 +13,7 @@ CUDA_VISIBLE_DEVICES=0 python3 -m trainers.train \
   --per_gpu_train_batch_size 4 \
   --per_gpu_eval_batch_size 1 \
   --learning_rate 1e-5 \
-  --num_train_epochs 1 \
+  --max_steps 20000 \
   --max_seq_length 128 \
   --output_dir "${OUTPUT_DIR}/ckpts" \
   --task_name "${TASK_NAME}" \
@@ -25,4 +25,4 @@ CUDA_VISIBLE_DEVICES=0 python3 -m trainers.train \
   --score_average_method "binary" \
   --do_not_load_optimizer \
   --evaluate_during_training \
-  #--overwrite_output_dir \
+  --overwrite_output_dir \
