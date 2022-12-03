@@ -475,9 +475,9 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
             eval_f1 = f1_score(labels, preds, average = args.score_average_method)
             #raise NotImplementedError("Please finish the TODO!")
             # TODO: Pairwise accuracy.
-            if args.task_name == "com2sense":
-                eval_pairwise_acc = pairwise_accuracy(guids, preds, labels)
-                #raise NotImplementedError("Please finish the TODO!")
+            #if args.task_name == "com2sense":
+            eval_pairwise_acc = pairwise_accuracy(guids, preds, labels)
+            #raise NotImplementedError("Please finish the TODO!")
 
         # End of TODO.
         ##################################################
