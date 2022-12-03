@@ -24,4 +24,5 @@ CUDA_VISIBLE_DEVICES=0 python3 -m trainers.train \
   --eval_split "dev" \
   --score_average_method "binary" \
   --do_not_load_optimizer \
+  --evaluate_during_training \
   #--overwrite_output_dir \
