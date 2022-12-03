@@ -44,6 +44,9 @@ def mask_tokens(inputs, tokenizer, args, special_tokens_mask=None):
     ##################################################
     # Optional TODO: this is an optional TODO that can get you more familiarized
     # with masked language modeling.
+    #use mlm on c2s then finetune on c2s
+    #do classification on semeval and then com2sense
+        #not pretaining on semval, just doing regular training
 
     # First sample a few tokens in each sequence for the MLM, with probability
     # `args.mlm_probability`.
@@ -51,22 +54,36 @@ def mask_tokens(inputs, tokenizer, args, special_tokens_mask=None):
     # function `masked_fill_`, and `torch.bernoulli`.
     # Check the inputs to the bernoulli function and use other hinted functions
     # to construct such inputs.
-    raise NotImplementedError("Please finish the TODO!")
+    #full will give use array full of mlm_probability
+    #bernoulli will give 1 or 0 for each of those cells in the array based on
+    #bernoulli
+    x = torch.bernoulli(torch.full(labels.shape, args.mlm_probability))
 
+    #sample 80% of words and get new masking and use new masking with old mask
     # Remember that the "non-masked" parts should be filled with ignore index.
-    raise NotImplementedError("Please finish the TODO!")
+
 
     # For 80% of the time, we will replace masked input tokens with  the
-    # tokenizer.mask_token (e.g. for BERT it is [MASK] for for RoBERTa it is
+    # tokenizer.mask_token (e.g. for (De)BERT it is [MASK] for for RoBERTa it is
     # <mask>, check tokenizer documentation for more details)
-    raise NotImplementedError("Please finish the TODO!")
+    indices_replaced = torch.bernoulli(torch.full(labels.shape, .8)).bool() & x.bool()
+    #print(indices_replaced)
 
     # For 10% of the time, we replace masked input tokens with random word.
     # Hint: you may find function `torch.randint` handy.
     # Hint: make sure that the random word replaced positions are not overlapping
     # with those of the masked positions, i.e. "~indices_replaced".
-    raise NotImplementedError("Please finish the TODO!")
+    indices_random = (torch.bernoulli(torch.full(labels.shape, .1)).bool() & x.bool())
+    indices_random = (indices_random ^ indices_replaced) & indices_random
+    #print(indices_random)
 
+    tmp_inputs = inputs.masked_fill_(indices_replaced == True, 103)
+    tmp_inputs = inputs.masked_fill_(indices_random == True, torch.randint(0, tokenizer.vocab_size, ()))
+    #print(tmp_inputs)
+
+    labels = labels.masked_fill_(tmp_inputs != 103, -100)
+    inputs = tmp_inputs
+    #print(labels)
     # End of TODO
     ##################################################
 
@@ -105,13 +122,14 @@ if __name__ == "__main__":
     input_sentence = "I am a good student and I love NLP."
     input_ids = tokenizer.encode(input_sentence)
     input_ids = torch.Tensor(input_ids).long().unsqueeze(0)
-    
+    #print(input_ids)
+
     inputs, labels = mask_tokens(input_ids, tokenizer, args,
                                  special_tokens_mask=None)
     inputs, labels = list(inputs.numpy()[0]), list(labels.numpy()[0])
-    ans_inputs = [101, 146, 103, 170, 103, 2377, 103, 146, 1567, 103, 2101, 119, 102]
+    ans_inputs = [101,   146,  103,  170,  103, 2377,  103,  146, 1567,   103, 2101,  119,  102]
     ans_labels = [-100, -100, 1821, -100, 1363, -100, 1105, -100, -100, 21239, -100, -100, -100]
-    
+
     if inputs == ans_inputs and labels == ans_labels:
         print("Your `mask_tokens` function is correct!")
     else:
