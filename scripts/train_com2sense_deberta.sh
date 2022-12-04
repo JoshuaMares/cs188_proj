@@ -1,8 +1,6 @@
-DATA_DIR="datasets/com2sense"
-#MODEL_TYPE="bert-base-cased"
-#MODEL_TYPE="roberta-base"
-MODEL_TYPE="microsoft/deberta-base"
 TASK_NAME="com2sense"
+DATA_DIR="datasets/com2sense"
+MODEL_TYPE="microsoft/deberta-base"
 OUTPUT_DIR=${TASK_NAME}/ckpts
 
 
