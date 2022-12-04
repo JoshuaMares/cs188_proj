@@ -6,7 +6,7 @@ TASK_NAME="com2sense"
 OUTPUT_DIR=${TASK_NAME}
 
 CUDA_VISIBLE_DEVICES=0 python3 -m trainers.train \
-  --model_name_or_path "outputs/semeval/ckpts/checkpoint-15000" \
+  --model_name_or_path "outputs/semeval/ckpts/checkpoint-10000" \
   --tokenizer_name ${MODEL_TYPE} \
   --config_name ${MODEL_TYPE} \
   --do_train \
