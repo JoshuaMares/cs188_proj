@@ -20,13 +20,13 @@ do
       --per_gpu_train_batch_size $gpu_train_batch_size \
       --per_gpu_eval_batch_size 1 \
       --learning_rate $lr \
-      --max_steps 5000 \
+      --max_steps 1600 \
       --max_seq_length 128 \
       --output_dir "${OUTPUT_DIR}/ckpts" \
       --task_name "${TASK_NAME}" \
       --data_dir "${DATA_DIR}" \
-      --save_steps 5000 \
-      --logging_steps 5000 \
+      --save_steps 1600 \
+      --logging_steps 1600 \
       --warmup_steps 100 \
       --eval_split "dev" \
       --score_average_method "micro" \
