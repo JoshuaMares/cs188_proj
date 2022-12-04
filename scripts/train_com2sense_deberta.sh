@@ -6,10 +6,12 @@ OUTPUT_DIR=${TASK_NAME}/ckpts
 
 CUDA_VISIBLE_DEVICES=0 python3 -m trainers.train \
   --model_name_or_path ${MODEL_TYPE} \
+  --tokenizer_name ${MODEL_TYPE} \
+  --config_name ${MODEL_TYPE} \
   --do_train \
   --do_eval \
   --eval_all_checkpoints \
-  --per_gpu_train_batch_size 16 \
+  --per_gpu_train_batch_size 4 \
   --per_gpu_eval_batch_size 1 \
   --learning_rate 1e-5 \
   --max_steps 5000 \
