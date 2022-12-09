@@ -5,11 +5,10 @@ MODEL_TYPE="microsoft/deberta-base"
 TASK_NAME="com2sense"
 OUTPUT_DIR=${TASK_NAME}
 
-for gpu_train_batch_size in 16 32
+for its in 1600 1800 2000
 do
-  for lr in 1e-1 1e-2 1e-3 1e-4 1e-5 1e-6 1e-7 1e-8 1e-9
+  for lr in 3e-5
   do
-    echo
     CUDA_VISIBLE_DEVICES=0 python3 -m trainers.train \
       --model_name_or_path "outputs/semeval/ckpts/checkpoint-45000" \
       --tokenizer_name ${MODEL_TYPE} \
@@ -17,16 +16,16 @@ do
       --do_train \
       --do_eval \
       --eval_all_checkpoints \
-      --per_gpu_train_batch_size $gpu_train_batch_size \
+      --per_gpu_train_batch_size 24 \
       --per_gpu_eval_batch_size 1 \
       --learning_rate $lr \
-      --max_steps 1600 \
+      --max_steps $its \
       --max_seq_length 128 \
       --output_dir "${OUTPUT_DIR}/ckpts" \
       --task_name "${TASK_NAME}" \
       --data_dir "${DATA_DIR}" \
-      --save_steps 1600 \
-      --logging_steps 1600 \
+      --save_steps $its \
+      --logging_steps $its \
       --warmup_steps 100 \
       --eval_split "dev" \
       --score_average_method "micro" \

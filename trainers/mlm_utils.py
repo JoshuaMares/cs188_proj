@@ -30,7 +30,7 @@ def mask_tokens(inputs, tokenizer, args, special_tokens_mask=None):
     # with the masked parts the same as the input ids but the rest as
     # args.mlm_ignore_index, so that the cross entropy loss will ignore it.
     labels = inputs.clone()
-
+    tmp_inputs = inputs.clone()
     # Constructs the special token masks.
     if special_tokens_mask is None:
         special_tokens_mask = [
@@ -77,8 +77,10 @@ def mask_tokens(inputs, tokenizer, args, special_tokens_mask=None):
     indices_random = (indices_random ^ indices_replaced) & indices_random
     #print(indices_random)
 
-    tmp_inputs = inputs.masked_fill_(indices_replaced == True, 103)
-    tmp_inputs = inputs.masked_fill_(indices_random == True, torch.randint(0, tokenizer.vocab_size, ()))
+    indices_replaced = indices_replaced.to(tmp_inputs.device)
+    indices_random = indices_random.to(tmp_inputs.device)
+    tmp_inputs = tmp_inputs.masked_fill_(indices_replaced == True, 103)
+    tmp_inputs = tmp_inputs.masked_fill_(indices_random == True, torch.randint(0, tokenizer.vocab_size, ()))
     #print(tmp_inputs)
 
     labels = labels.masked_fill_(tmp_inputs != 103, -100)

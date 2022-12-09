@@ -18,5 +18,5 @@ CUDA_VISIBLE_DEVICES=0 python3 -m trainers.train \
   --tokenizer_name ${MODEL_TYPE} \
   --max_seq_length 128 \
   --do_eval \
-  --iters_to_eval 5000 \
+  --iters_to_eval 11000 \
   #--overwrite_output_dir \

@@ -9,16 +9,18 @@ CUDA_VISIBLE_DEVICES=0 python3 -m trainers.train \
   --do_train \
   --do_eval \
   --eval_all_checkpoints \
+  --evaluate_during_training \
   --per_gpu_train_batch_size 16 \
+  --gradient_accumulation_steps 4 \
   --per_gpu_eval_batch_size 1 \
-  --learning_rate 1e-5 \
+  --learning_rate 5e-5 \
   --max_steps 5000 \
   --max_seq_length 128 \
   --output_dir "${OUTPUT_DIR}" \
   --task_name "${TASK_NAME}" \
   --data_dir "${DATA_DIR}" \
   --save_steps 1000 \
-  --logging_steps 1000 \
+  --logging_steps 100 \
   --warmup_steps 100 \
   --eval_split "dev" \
   --score_average_method "binary" \

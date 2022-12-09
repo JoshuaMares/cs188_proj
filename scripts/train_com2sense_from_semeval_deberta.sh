@@ -12,15 +12,15 @@ CUDA_VISIBLE_DEVICES=0 python3 -m trainers.train \
   --do_train \
   --do_eval \
   --eval_all_checkpoints \
-  --per_gpu_train_batch_size 4 \
+  --per_gpu_train_batch_size 24 \
   --per_gpu_eval_batch_size 1 \
-  --learning_rate 1e-5 \
+  --learning_rate 1e-4 \
   --max_steps 5000 \
   --max_seq_length 128 \
   --output_dir "${OUTPUT_DIR}/ckpts" \
   --task_name "${TASK_NAME}" \
   --data_dir "${DATA_DIR}" \
-  --save_steps 500 \
+  --save_steps 1000 \
   --logging_steps 100 \
   --warmup_steps 100 \
   --eval_split "dev" \
